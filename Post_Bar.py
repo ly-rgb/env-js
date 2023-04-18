@@ -1,5 +1,11 @@
+# li_yong
 import re
 import csv
+import requests
+
+
+html = requests.get("https://www.baidu.com/").text
+print(html)
 
 with open('/Users/momo/Desktop/source.txt','r',encoding='utf-8') as f:
     source = f.read()
