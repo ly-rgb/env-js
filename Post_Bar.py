@@ -6,15 +6,21 @@ import time
 import parsel
 import requests
 
+
 def get_user_home_page(id, proxies):
+    """
+    :param id: 用户 id
+    :param proxies:  代理
+    :return: 用户主页的html文档
+    """
     url = "https://tieba.baidu.com/home/main"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36'}
     params = {
-'id': id,
-'fr': 'index'
-}
-    html = requests.get(url=url, headers=headers, params=params, proxies=proxies).content.decode('utf-8')
+        'id': id,
+        'fr': 'index'
+    }
+    html = requests.get(url=url, params=params, proxies=proxies).content.decode('utf-8')
     return html
+
 
 def parse_home_html(home_html):
     selector = parsel.Selector(home_html)
@@ -23,10 +29,11 @@ def parse_home_html(home_html):
     content_list = []
     for post in post_list:
         content = post.css(".n_contain .thread_name a::attr(title)").get()
-        old_cont_url = post.css(".n_contain > ul > li > img ::attr(src)").get()
-        post_url = post.css(".n_contain > div:nth-child(1) > div > a.title ::attr(href)").get()
+        old_cont_url = post.css(".n_contain > ul > li > img::attr(src)").get()
+        post_url = post.css(".n_contain > div:nth-child(1) > div > a.title::attr(href)").get()
         content_list.append({"content": content, "old_cont_url": old_cont_url, "post_url": post_url})
     return author, content_list
+
 
 def get_post_page(post_url, proxies):
     headers = {
@@ -34,6 +41,7 @@ def get_post_page(post_url, proxies):
     post_url_complete = "https://tieba.baidu.com/" + post_url
     html = requests.get(url=post_url_complete, headers=headers, proxies=proxies).content.decode('utf-8')
     return html
+
 
 def parse_post_page(post_html):
     selector = parsel.Selector(post_html)
@@ -44,6 +52,7 @@ def parse_post_page(post_html):
     else:
         publish_time = re.findall('class="tail-info">(.*?)<', publish_time_str, re.S)[1]
     return user_id, publish_time
+
 
 def get_more_post(author, page, proxies):
     url = "https://tieba.baidu.com/home/get/getthread"
@@ -63,6 +72,7 @@ def get_more_post(author, page, proxies):
         publish_time = _["last_reply_time"]
         print(content, old_cont_url, publish_time)
         return res
+
 
 def get_proxy():
     proxy_url = "http://192.168.200.145:10101/api/proxy_ip?queue_name=baidu"
@@ -95,4 +105,3 @@ if __name__ == '__main__':
             page += 1
         else:
             break
-
