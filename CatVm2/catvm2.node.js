@@ -10,6 +10,7 @@ function GetCode() {
     // code += "catvm.memory.config.proxy = true;\r\n"
     // 引入浏览器相关代码
     code += fs.readFileSync(`${__dirname}/browser/EventTarget.js`) + '\r\n';
+    code += fs.readFileSync(`${__dirname}/browser/Event.js`) + '\r\n';
     code += fs.readFileSync(`${__dirname}/browser/WindowProperties.js`) + '\r\n';
     // 加载BOM环境（优于DOM加载）
     code += fs.readFileSync(`${__dirname}/browser/Window.js`) + '\r\n';
@@ -23,6 +24,8 @@ function GetCode() {
     code += fs.readFileSync(`${__dirname}/browser/Plugin.js`) + '\r\n';
     code += fs.readFileSync(`${__dirname}/browser/PluginArray.js`) + '\r\n';
     code += fs.readFileSync(`${__dirname}/browser/MimeTypeArray.js`) + '\r\n';
+    code += fs.readFileSync(`${__dirname}/browser/HTMLCollection.js`) + '\r\n';
+    code += fs.readFileSync(`${__dirname}/browser/Performance.js`) + '\r\n';
 
     // 加载HTML节点
     code += vmhtml.GetCode() + '\r\n';
