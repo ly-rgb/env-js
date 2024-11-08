@@ -16,7 +16,8 @@ class PerformanceEntry {
   
 // 自定义的 Performance 类  
 class Performance extends EventTarget{  
-    constructor() {    
+    constructor() {
+        super()
         this.entries = catvm.memory.per.entries; // 存储 PerformanceEntry 的数组  
         this.marks = catvm.memory.per.marks; // 存储标记的 Map（键为标记名称，值为时间戳）  
         this.measures = catvm.memory.per.measures; // 存储度量的 Map（键为度量名称，值为 CustomPerformanceEntry）  
